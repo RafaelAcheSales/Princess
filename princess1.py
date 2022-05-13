@@ -1,29 +1,62 @@
 #!/usr/bin/python
-PRINCESS_CHAR = 'p'
+class Actor:
+    def find_char_update_position(self):
+        for i in range(self.n):
+            self.position = [i, grid[i].find(self.c)]
+            if self.position[1] != -1: break
+    def __init__(self, n: int, c: str):
+        self.n = n
+        self.c = c
+        self.find_char_update_position()
+
+    
+    
+
+class Player(Actor):
+    #movement functions
+    def move_left(self):
+        print("LEFT")
+        self.position[1] -= 1
+    def move_right(self):
+        print("RIGHT")
+        self.position[1] += 1
+    def move_up(self):
+        print("UP")
+        self.position[0] -= 1
+    def move_down(self):
+        print("DOWN")
+        self.position[0] += 1
+    
+    def calculate_distance(self, princess: Actor):
+        return [x - y for x, y in zip(princess.position, self.position)]
+
+    def reach_princess(self, princess: Actor):
+        distance = self.calculate_distance(princess)
+        self.walkXaxis(distance[1])
+        self.walkYaxis(distance[0])
+        
+    def walkYaxis(self, value: int):
+        if value < 0:
+            for i in range(abs(value)):
+                self.move_up() 
+        elif value > 0:
+            for i in range(abs(value)):
+                self.move_down() 
+                
+    def walkXaxis(self, value: int):
+        if value < 0:
+            for i in range(abs(value)):
+                self.move_left() 
+        elif value > 0:
+            for i in range(abs(value)):
+                self.move_right()
+    
+
 
 def displayPathtoPrincess(n,grid):
-    #finds the position of the princess
-    for i in range(n):
-        princess_position = [i, grid[i].find(PRINCESS_CHAR)]
-        if princess_position[1] != -1: break
-    player_position = [int((n-1)/2), int((n-1)/2)]
-    #for each dimension
-    for k in range(2):
-        #for each cell
-        for i in range(n):
-            #calculates position variation and moves player
-            delta_pos = princess_position[k] - player_position[k]
-            is_vertical = k == 0
-            if delta_pos < 0:
-                move = "UP" if is_vertical else "LEFT"
-                print(move)
-                player_position[k] -= 1
-            elif delta_pos > 0:
-                move = "DOWN" if is_vertical else "RIGHT"
-                print(move)
-                player_position[k] += 1
-            
-
+    player = Player(n, 'm')
+    princess = Actor(n, 'p')
+    player.reach_princess(princess)
 #print all the moves here
 
 m = int(input())
