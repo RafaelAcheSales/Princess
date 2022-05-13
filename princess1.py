@@ -1,5 +1,6 @@
 #!/usr/bin/python
 class Actor:
+    #finds the postion of the char
     def find_char_update_position(self):
         for i in range(self.n):
             self.position = [i, grid[i].find(self.c)]
@@ -10,6 +11,7 @@ class Actor:
         self.find_char_update_position()
 
 class Player(Actor):
+
     #movement functions
     def move_left(self):
         print("LEFT")
@@ -23,24 +25,28 @@ class Player(Actor):
     def move_down(self):
         print("DOWN")
         self.position[0] += 1
-    
+
+    #calculates distance from princess to player
     def calculate_distance(self, princess: Actor):
         return [x - y for x, y in zip(princess.position, self.position)]
 
+    #moves the player until it reaches the princess
     def reach_princess(self, princess: Actor):
         distance = self.calculate_distance(princess)
-        self.walkXaxis(distance[1])
-        self.walkYaxis(distance[0])
-        
-    def walkYaxis(self, value: int):
+        self.walk_x_axis(distance[1])
+        self.walk_y_axis(distance[0])
+
+    #computes Y axis movement
+    def walk_y_axis(self, value: int):
         if value < 0:
             for i in range(abs(value)):
                 self.move_up() 
         elif value > 0:
             for i in range(abs(value)):
                 self.move_down() 
-                
-    def walkXaxis(self, value: int):
+
+    #computes X axis movement       
+    def walk_x_axis(self, value: int):
         if value < 0:
             for i in range(abs(value)):
                 self.move_left() 
@@ -54,7 +60,7 @@ def displayPathtoPrincess(n,grid):
     player = Player(n, 'm')
     princess = Actor(n, 'p')
     player.reach_princess(princess)
-#print all the moves here
+
 
 m = int(input())
 grid = [] 
