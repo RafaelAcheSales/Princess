@@ -9,9 +9,6 @@ class Actor:
         self.c = c
         self.find_char_update_position()
 
-    
-    
-
 class Player(Actor):
     #movement functions
     def move_left(self):
