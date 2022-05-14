@@ -1,22 +1,45 @@
-def nextMove(n,r,c,grid):
-    #finds the position of the princess
-    for i in range(n):
-        princess_position = [i, grid[i].find('p')]
-        if princess_position[1] != -1: break
-    for k in range(2):
-        is_vertical = k == 0
-        player_position = r if is_vertical else c
-        delta_pos = princess_position[k] - player_position
-        if delta_pos < 0:
-            return "UP" if is_vertical else "LEFT"
-        elif delta_pos > 0:
-            return "DOWN" if is_vertical else "RIGHT"
-    return ""
+#!/usr/bin/python
+class Actor:
+    #finds the postion of the char
+    def find_char_update_position(self):
+        for i in range(self.n):
+            self.position = [i, self.grid[i].find(self.c)]
+            if self.position[1] != -1: break
+    def __init__(self, n: int, c: str, grid: list):
+        self.n = n
+        self.c = c
+        self.grid = grid
+        self.find_char_update_position()
+
+
+class MoveCalculator:
+    def __init__(self, princess: Actor):
+        self.princess = princess
+    def calculate_next_move(self, n, r, c):
+        distance = self.calculate_distance(r, c)
+        return self.move(distance)
+    def calculate_distance(self, r, c):
+        return [r - self.princess.position[0], c - self.princess.position[1]]
+    def move(self, distance):
+        if distance[0] > 0:
+            return("UP")
+        elif distance[0] < 0:
+            return("DOWN")
+        elif distance[1] > 0:
+            return("LEFT")
+        elif distance[1] < 0:
+            return("RIGHT")
+        return ""
+        
+    
+def nextMove(n,r,c,grid, move_calculator: MoveCalculator):
+    return move_calculator.calculate_next_move(n, r, c)
 
 n = int(input())
 r,c = [int(i) for i in input().strip().split()]
 grid = []
 for i in range(0, n):
     grid.append(input())
-
-print(nextMove(n,r,c,grid))
+princess = Actor(n, 'p', grid)
+move_calculator = MoveCalculator(princess)
+print(nextMove(n,r,c,grid, move_calculator))
